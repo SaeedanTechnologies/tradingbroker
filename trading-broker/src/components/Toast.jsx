@@ -1,10 +1,11 @@
 import { toast } from "react-toastify";
 
 const Toast = ({ variant, message }) => {
+  // debugger;
   switch (variant) {
     case "success":
       toast.success(message, {
-        position: "bottom-right",
+        position: "top-right",
         className: "foo-bar",
         autoClose: 2000,
         pauseOnHover: false,
@@ -12,7 +13,7 @@ const Toast = ({ variant, message }) => {
       break;
     case "error":
       toast.error(message, {
-        position: "bottom-right",
+        position: "top-right",
         className: "foo-bar",
         autoClose: 15000,
         pauseOnHover: true,
@@ -21,7 +22,7 @@ const Toast = ({ variant, message }) => {
       break;
     case "warn":
       toast.warn(message, {
-        position: "bottom-right",
+        position: "top-right",
         className: "foo-bar",
         autoClose: 2000,
         pauseOnHover: false,
@@ -30,7 +31,7 @@ const Toast = ({ variant, message }) => {
       break;
     case "info":
       toast.info(message, {
-        position: "bottom-right",
+        position: "top-right",
         className: "foo-bar",
         autoClose: 2000,
         pauseOnHover: false,

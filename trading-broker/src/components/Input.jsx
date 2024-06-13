@@ -6,7 +6,7 @@ const Input = ({ errorMessage, className, placeholder, type, ...rest }) => {
       <input
         type={type}
         placeholder={placeholder}
-        className={`input input-bordered w-full autofill:!bg-white ${className} ${
+        className={`input input-bordered w-full px-2  autofill:!bg-white ${className} ${
           errorMessage && "input-error"
         }`}
         {...rest}

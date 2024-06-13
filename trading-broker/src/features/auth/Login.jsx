@@ -1,46 +1,10 @@
-import { useState } from "react";
 import { Input, Button } from "../../components";
-import { useDispatch } from "react-redux";
-import client from "../../config/axios";
-import { LoginRoute } from "../../utils/api_routes";
-import { useNavigate } from "react-router-dom";
-import { setToken, setLoginUser } from "../../store/actions/authActions";
+
+import useLogin from "../../hooks/useLogin";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
-  const handleLogin = async (e) => {
-    debugger;
-    e.preventDefault();
-    setIsLoading(true);
-
-    const {
-      data: { payload, success, message },
-    } = await client.post(LoginRoute, {
-      email,
-      password,
-    });
-
-    if (success) {
-      alert(message);
-      setIsLoading(false);
-
-      setEmail("");
-      setPassword("");
-
-      dispatch(setToken(payload.token));
-      dispatch(setLoginUser(payload));
-
-      navigate("/dashboard");
-    } else {
-      alert("Login failed: " + message);
-    }
-  };
+  const { email, setEmail, password, setPassword, isLoading, handleLogin } =
+    useLogin();
 
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -72,6 +36,7 @@ const Login = () => {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                placeholder={"user@gmail.com"}
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -88,15 +53,16 @@ const Login = () => {
               </label>
             </div>
             <div className="mt-2">
-              <input
+              <Input
                 id="password"
                 name="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
+                placeholder="••••••••"
                 required
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0  py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -104,10 +70,10 @@ const Login = () => {
           <div>
             <Button
               type="submit"
-              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-md font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               isLoading={isLoading}
             >
-              Sign in
+              Sign In
             </Button>
           </div>
         </form>

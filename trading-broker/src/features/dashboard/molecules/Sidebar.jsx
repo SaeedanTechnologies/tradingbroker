@@ -1,7 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
-import { NavLink, useLocation } from "react-router-dom";
-import SidebarLinkGroup from "./SidebarLinkGroup";
+import { useEffect, useRef, useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import Logo from "/logo.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken, setLoginUser } from "../../../store/actions/authActions";
+import { Toast } from "../../../components";
+import client from "../../../config/axios";
+import { LogoutRoute } from "../../../utils/api_routes";
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation();
@@ -14,6 +18,30 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
   );
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userToken = useSelector((state) => state?.auth?.token);
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    dispatch(setToken(""));
+    dispatch(setLoginUser(null));
+
+    const {
+      data: { payload, success, message },
+    } = await client.get(LogoutRoute, {
+      userToken,
+    });
+
+    if (success) {
+      Toast({ variant: "success", message });
+
+      navigate("/");
+    } else {
+      Toast({ variant: "error", message });
+    }
+  };
 
   // close on click outside
   useEffect(() => {
@@ -206,11 +234,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                   Settings
                 </NavLink>
 
-                <NavLink
-                  to="/chart"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes("chart") && "bg-graydark dark:bg-meta-4"
-                  }`}
+                <div
+                  onClick={handleLogout}
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-white duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 cursor-pointer`}
                 >
                   <svg
                     className="fill-current"
@@ -242,7 +268,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
                     </defs>
                   </svg>
                   Logout
-                </NavLink>
+                </div>
               </li>
               {/* <!-- Menu Item Settings --> */}
             </ul>

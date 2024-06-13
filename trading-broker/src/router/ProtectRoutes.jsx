@@ -2,9 +2,8 @@ import { useSelector } from "react-redux";
 import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ element }) => {
-  // debugger;
   const location = useLocation();
-  const userToken = useSelector((state) => state?.auth?.token);
+  const userToken = useSelector((state) => state?.auth?.loginUser?.token);
 
   return userToken ? (
     element

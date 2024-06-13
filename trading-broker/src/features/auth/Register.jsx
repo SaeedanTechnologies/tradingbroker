@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Button, Input } from "../../components";
+import { Button, Input, Toast } from "../../components";
 import { useState } from "react";
 import { Countries, CurrenciesList } from "../../utils/constant";
 import client from "../../config/axios";
@@ -33,8 +33,8 @@ const Register = () => {
     });
 
     if (success) {
-      alert(message);
       setIsLoading(false);
+      Toast({ variant: "success", message });
 
       setName("");
       setEmail("");
@@ -42,9 +42,10 @@ const Register = () => {
       setCountry("");
       setPhone("");
       setCurrency("");
+
       navigate("/login");
     } else {
-      alert("Sign up failed: " + message);
+      Toast({ variant: "error", message });
     }
   };
 
